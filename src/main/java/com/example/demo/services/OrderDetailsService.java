@@ -28,6 +28,7 @@ public class OrderDetailsService {
 		this.kafkaProducer = kafkaProducer;
 	}
 
+
 	public OrderDetailsRepository getOrderDetailsRepository() {
 		return orderDetailsRepository;
 	}

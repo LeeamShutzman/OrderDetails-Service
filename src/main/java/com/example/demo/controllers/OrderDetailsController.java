@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Properties;
 
 import com.example.demo.models.OrderDetailsPK;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.models.OrderDetails;
@@ -15,11 +17,11 @@ import javax.ws.rs.Path;
 @RestController
 @RequestMapping("orderDetails") //localhost:portNum/categories
 public class OrderDetailsController {
+
+	@Autowired
 	private OrderDetailsService orderDetailsService;
 
-	
-	
-	public OrderDetailsController(OrderDetailsService orderDetailsService, KafkaProducer kafkaProducer) {
+	public OrderDetailsController(OrderDetailsService orderDetailsService) {
 		super();
 		this.orderDetailsService = orderDetailsService;
 		
