@@ -57,10 +57,11 @@ public class OrderDetailsController {
 		OrderDetailsPK orderDetailsPK = new OrderDetailsPK(orderID, productID);
 		orderDetailsService.deleteById(orderDetailsPK);
 	}
-	/*
-	@GetMapping("order{id}")
-	public List<OrderDetails> getProductByID(@PathVariable("id") long orderID) {
-		return orderDetailsService.findByProductID(orderID);
+
+	@GetMapping("/findOrderDetails") //localhost:portNum/orders/deleteProduct
+	public void findById(@RequestParam(name = "orderID") long orderID, @RequestParam(name = "productID") long productID){
+	   OrderDetailsPK orderDetailsPK = new OrderDetailsPK(orderID, productID);
+	   orderDetailsService.findByID(orderDetailsPK);
 	}
-	*/
+	
 }

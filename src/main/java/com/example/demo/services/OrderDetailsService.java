@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.models.OrderDetailsPK;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,4 +73,10 @@ public class OrderDetailsService {
 	public void deleteById(OrderDetailsPK orderDetailsPK) {
 		orderDetailsRepository.deleteById(orderDetailsPK);
 	}
+	
+	public Optional<OrderDetails> findByID(OrderDetailsPK orderDetailsPK) {
+		return orderDetailsRepository.findById(orderDetailsPK);
+	}
+
+	
 }
