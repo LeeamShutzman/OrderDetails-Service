@@ -23,12 +23,14 @@ public class OrderDetailsService {
 
 	private final KafkaProducer kafkaProducer;
 
+	/***************************************************************/
+	//Constructors, Getters, and Setters
+
 	public OrderDetailsService(OrderDetailsRepository orderDetailsRepository, KafkaProducer kafkaProducer) {
 		super();
 		this.orderDetailsRepository = orderDetailsRepository;
 		this.kafkaProducer = kafkaProducer;
 	}
-
 
 	public OrderDetailsRepository getOrderDetailsRepository() {
 		return orderDetailsRepository;
@@ -42,11 +44,14 @@ public class OrderDetailsService {
 		return kafkaProducer;
 	}
 
-	/*********************************************************/
-	public OrderDetails addItem(OrderDetails orderDetails) {
+	/***************************************************************/
+	//Repository Method Calls
+
+	//Add an OrderDetails
+	public OrderDetails addOrderDetails(OrderDetails orderDetails) {
 		try {
 			Product product = restTemplate.getForObject(
-					"http://localhost:8070/products/product" + orderDetails.getProductID(), Product.class);
+					"http://localhost:8070/products/getProductByID?productID=" + orderDetails.getProductID(), Product.class);
 			String productName = product.getProductName();
 			OrderDetails temp = orderDetailsRepository.save(orderDetails);
 			this.kafkaProducer.sendMessage("Added " + orderDetails.getQuantity() + " " + productName
@@ -62,21 +67,29 @@ public class OrderDetailsService {
 
 	}
 
+	//View all OrderDetails
 	public List<OrderDetails> findAll() {
 		return orderDetailsRepository.findAll();
 	}
 
-	public List<OrderDetails> findByOrderID(long orderID) {
-		return orderDetailsRepository.findByOrderID(orderID);
-	}
-
-	public void deleteById(OrderDetailsPK orderDetailsPK) {
-		orderDetailsRepository.deleteById(orderDetailsPK);
-	}
-	
-	public Optional<OrderDetails> findByID(OrderDetailsPK orderDetailsPK) {
+	//View an OrderDetails object by composite key ID
+	public Optional<OrderDetails> findByOrderDetailsID(OrderDetailsPK orderDetailsPK) {
 		return orderDetailsRepository.findById(orderDetailsPK);
 	}
 
-	
+	//View all OrderDetails in the same order
+	public List<OrderDetails> findOrderDetailsByOrderID(long orderID) {
+		return orderDetailsRepository.findByOrderID(orderID);
+	}
+
+	//View all OrderDetails for the same Product
+	public List<OrderDetails> findOrderDetailsByProductID(long productID) {
+		return orderDetailsRepository.findByProductID(productID);
+	}
+
+	//Delete an OrderDetails
+	public void deleteOrderDetails(OrderDetailsPK orderDetailsPK) {
+		orderDetailsRepository.deleteById(orderDetailsPK);
+	}
+
 }

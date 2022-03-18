@@ -1,18 +1,14 @@
 package com.example.demo.controllers;
 
 import java.util.List;
-import java.util.Properties;
+import java.util.Optional;
 
 import com.example.demo.models.OrderDetailsPK;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.models.OrderDetails;
-import com.example.demo.producers.KafkaProducer;
 import com.example.demo.services.OrderDetailsService;
-
-import javax.ws.rs.Path;
 
 @RestController
 @RequestMapping("orderDetails") //localhost:portNum/categories
@@ -20,6 +16,9 @@ public class OrderDetailsController {
 
 	@Autowired
 	private OrderDetailsService orderDetailsService;
+
+	/***************************************************************/
+	//Constructors, Getters, and Setters
 
 	public OrderDetailsController(OrderDetailsService orderDetailsService) {
 		super();
@@ -34,34 +33,45 @@ public class OrderDetailsController {
 	public void setOrderDetailsService(OrderDetailsService orderDetailsService) {
 		this.orderDetailsService = orderDetailsService;
 	}
-	
 
+	/***************************************************************/
+	//Service endpoint mapping
 
-	@PostMapping("add")
-	public OrderDetails addItem(@RequestBody OrderDetails orderDetails) {
-		return orderDetailsService.addItem(orderDetails);
+	//Add an OrderDetails
+	@PostMapping("/add") //localhost:portNum/orderDetails/add
+	public OrderDetails addOrderDetails(@RequestBody OrderDetails orderDetails) {
+		return orderDetailsService.addOrderDetails(orderDetails);
 	}
-	
-	@GetMapping("all")
-	public List<OrderDetails> getAllProductsOrdered(){
+
+	//View all OrderDetails'
+	@GetMapping("/all") //localhost:portNum/orderDetails/all
+	public List<OrderDetails> getAllOrderDetails(){
 		return orderDetailsService.findAll();
 	}
-	
-	@GetMapping()
-	public List<OrderDetails> getProductsByOrderID(@RequestParam long orderID) {
-		return orderDetailsService.findByOrderID(orderID);
-	}
 
-	@DeleteMapping("/deleteOrderDetails") //localhost:portNum/orders/deleteProduct
-	public void deleteById(@RequestParam(name = "orderID") long orderID, @RequestParam(name = "productID") long productID){
+	//View an OrderDetails object by composite key ID
+	@GetMapping("/getOrderDetailsByID") //localhost:portNum/orderDetails/getOrderDetailsByID?orderID=#&productID=#
+	public Optional<OrderDetails> getOrderDetailsById(@RequestParam(name = "orderID") long orderID, @RequestParam(name = "productID") long productID){
 		OrderDetailsPK orderDetailsPK = new OrderDetailsPK(orderID, productID);
-		orderDetailsService.deleteById(orderDetailsPK);
+		return orderDetailsService.findByOrderDetailsID(orderDetailsPK);
 	}
 
-	@GetMapping("/findOrderDetails") //localhost:portNum/orders/deleteProduct
-	public void findById(@RequestParam(name = "orderID") long orderID, @RequestParam(name = "productID") long productID){
-	   OrderDetailsPK orderDetailsPK = new OrderDetailsPK(orderID, productID);
-	   orderDetailsService.findByID(orderDetailsPK);
+	//View all OrderDetails objects in the same Order
+	@GetMapping("/getOrderDetailsByOrderID") //localhost:portNum/orderDetails/getOrderDetailsByOrderID?orderID=#
+	public List<OrderDetails> getOrderDetailsByOrderID(@RequestParam long orderID) {
+		return orderDetailsService.findOrderDetailsByOrderID(orderID);
 	}
-	
+
+	//View all OrderDetails objects for the same Product
+	@GetMapping("/getOrderDetailsByProductID")//localhost:portNum/orderDetails/getOrderDetailsByProductID?productID=#
+	public List<OrderDetails> getOrderDetailsByProductID(@RequestParam long productID) {
+		return orderDetailsService.findOrderDetailsByProductID(productID);
+	}
+
+	//Delete an OrderDetails
+	@DeleteMapping("/delete") //localhost:portNum/orderDetails/delete?orderID=#&productID=#
+	public void deleteOrderDetails(@RequestParam(name = "orderID") long orderID, @RequestParam(name = "productID") long productID){
+		OrderDetailsPK orderDetailsPK = new OrderDetailsPK(orderID, productID);
+		orderDetailsService.deleteOrderDetails(orderDetailsPK);
+	}
 }
