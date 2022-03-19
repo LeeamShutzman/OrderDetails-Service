@@ -43,6 +43,7 @@ class OrderDetailsControllerAcceptanceTest {
 
     @Test
     void getOrderDetailsService() {
+        assertEquals("test", "doesn'tPass");
     }
 
     @Test
