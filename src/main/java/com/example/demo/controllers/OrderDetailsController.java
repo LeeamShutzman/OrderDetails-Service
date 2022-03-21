@@ -74,4 +74,11 @@ public class OrderDetailsController {
 		OrderDetailsPK orderDetailsPK = new OrderDetailsPK(orderID, productID);
 		orderDetailsService.deleteOrderDetails(orderDetailsPK);
 	}
+
+	//Update an OrderDetails
+	@PutMapping("/update") //localhost:portNum/orderDetails/update
+	public OrderDetails updateOrderDetails(@RequestParam(name = "orderID") long orderID, @RequestParam(name = "productID") long productID, @RequestBody OrderDetails orderDetails) {
+		OrderDetailsPK orderDetailsPK = new OrderDetailsPK(orderID, productID);
+		return orderDetailsService.updateOrderDetails(orderDetailsPK, orderDetails);
+	}
 }

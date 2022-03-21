@@ -1,8 +1,11 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
+import com.example.demo.models.Order;
 import com.example.demo.models.OrderDetailsPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,4 +95,17 @@ public class OrderDetailsService {
 		orderDetailsRepository.deleteById(orderDetailsPK);
 	}
 
+	public OrderDetails updateOrderDetails(OrderDetailsPK orderDetailsID, OrderDetails orderDetails) {
+		try {
+			OrderDetails temp = orderDetailsRepository.findById(orderDetailsID).get();
+			if(Objects.nonNull(orderDetails.getQuantity()) && orderDetails.getQuantity() != 0){
+				temp.setQuantity(orderDetails.getQuantity());
+			}
+			return orderDetailsRepository.save(temp);
+		}
+		catch (NoSuchElementException e){
+			System.out.println("No order detail for that order and product was found");
+			return new OrderDetails();
+		}
+	}
 }
