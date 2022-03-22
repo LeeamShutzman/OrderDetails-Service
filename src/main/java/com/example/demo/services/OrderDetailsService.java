@@ -95,6 +95,7 @@ public class OrderDetailsService {
 		orderDetailsRepository.deleteById(orderDetailsPK);
 	}
 
+	//Update an OrderDetails
 	public OrderDetails updateOrderDetails(OrderDetailsPK orderDetailsID, OrderDetails orderDetails) {
 		try {
 			OrderDetails temp = orderDetailsRepository.findById(orderDetailsID).get();
@@ -105,7 +106,8 @@ public class OrderDetailsService {
 		}
 		catch (NoSuchElementException e){
 			System.out.println("No order detail for that order and product was found");
-			return new OrderDetails();
+			return null;
 		}
 	}
+
 }
