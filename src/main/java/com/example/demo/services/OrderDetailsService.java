@@ -62,10 +62,10 @@ public class OrderDetailsService {
 			return temp;
 		} catch (org.springframework.dao.DataIntegrityViolationException e) {
 			this.kafkaProducer.sendMessage("Order doesn't exist");
-			return new OrderDetails();
+			return null;
 		} catch (java.lang.NullPointerException e) {
 			this.kafkaProducer.sendMessage("Product doesn't exist");
-			return new OrderDetails();
+			return null;
 		}
 
 	}
